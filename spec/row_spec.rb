@@ -30,10 +30,10 @@ describe "basic methods" do
       row.column_values.size.should eq(row.column_names.size)
     end
   end
-  
+
   context "checking types" do
     it "should return a Time for created_at" do
-      row['created_at'].should be_kind_of(Time)
+      row['created_at'].should be_kind_of(UUID)
     end
 
     it "should return a Fixnum for serial" do

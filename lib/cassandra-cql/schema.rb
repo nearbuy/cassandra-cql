@@ -61,9 +61,7 @@ module CassandraCQL
 
     def self.cast(value, type)
       case type
-      when "org.apache.cassandra.db.marshal.TimeUUIDType"
-        UUID.to_time(value)
-      when "org.apache.cassandra.db.marshal.UUIDType"
+      when "org.apache.cassandra.db.marshal.TimeUUIDType", "org.apache.cassandra.db.marshal.UUIDType"
         UUID.new(value)
       when "org.apache.cassandra.db.marshal.IntegerType"
         int = 0
