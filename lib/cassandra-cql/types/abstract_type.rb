@@ -24,6 +24,7 @@ module CassandraCQL
       private
       
       def self.bytes_to_int(bytes)
+        return nil if bytes.empty?
         int = 0
         values = bytes.unpack('C*')
         values.each {|v| int = int << 8; int += v; }
@@ -34,6 +35,7 @@ module CassandraCQL
       end
 
       def self.bytes_to_long(bytes)
+        return nil if bytes.empty?
         ints = bytes.unpack("NN")
         val = (ints[0] << 32) + ints[1]
         if val & 2**63 == 2**63

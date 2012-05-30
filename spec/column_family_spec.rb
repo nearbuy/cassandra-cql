@@ -101,5 +101,11 @@ describe "ColumnFamily class" do
         ColumnFamily.cast(nil, type).should eq(nil)
       end
     end
+
+    it "should return nil when it finds an empty string in integer-oriented types" do
+      %w(LongType IntegerType CounterColumnType).each do |type|
+        ColumnFamily.cast('', type).should eq(nil)
+      end
+    end
   end
 end
