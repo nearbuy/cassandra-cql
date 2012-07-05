@@ -18,6 +18,7 @@ module CassandraCQL
   module Types
     class BooleanType < AbstractType
       def self.cast(value)
+        return nil if value.empty?
         value.unpack('C') == [1]
       end
     end

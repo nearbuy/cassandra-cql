@@ -107,5 +107,11 @@ describe "ColumnFamily class" do
         ColumnFamily.cast('', type).should eq(nil)
       end
     end
+
+    it "should return nil when it finds an empty string in non-string oriented types" do
+      %w(UUIDType FloatType DoubleType DecimalType DateType BooleanType).each do |type|
+        ColumnFamily.cast('', type).should eq(nil)
+      end
+    end
   end
 end

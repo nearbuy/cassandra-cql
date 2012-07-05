@@ -18,6 +18,7 @@ module CassandraCQL
   module Types
     class UUIDType < AbstractType
       def self.cast(value)
+        return nil if value.empty?
         UUID.new(value)
       end
     end

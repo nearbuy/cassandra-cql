@@ -18,6 +18,7 @@ module CassandraCQL
   module Types
     class FloatType < AbstractType
       def self.cast(value)
+        return nil if value.empty?
         value.unpack('g')[0]
       end
     end

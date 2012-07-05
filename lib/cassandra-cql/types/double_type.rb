@@ -18,6 +18,7 @@ module CassandraCQL
   module Types
     class DoubleType < AbstractType
       def self.cast(value)
+        return nil if value.empty?
         value.unpack('G')[0]
       end
     end
