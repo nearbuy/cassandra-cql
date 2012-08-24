@@ -2,7 +2,7 @@ module CassandraCQL
   module V08
     class ResultSchema < CassandraCQL::ResultSchema
       def initialize(column_family)
-        type_slice = lambda {|type| type[type.rindex('.')+1..-1] }
+        type_slice = lambda {|type| type.match(/.*\.(\w+)/)[1] }
 
         @names = Hash.new(type_slice.call(column_family.comparator_type))
         @values = Hash.new(type_slice.call(column_family.default_validation_class))
