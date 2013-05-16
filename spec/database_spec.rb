@@ -8,13 +8,23 @@ describe "Database" do
 
   describe "schema" do
     it "should cache schema" do
-      @connection.connection.should_receive(:describe_keyspace).exactly(2).times.and_call_original
+      @connection.connection.should_receive(:describe_keyspace).exactly(1).times.and_call_original
       @connection.schema
       @connection.schema
+    end
 
-      # changing keyspace should unset cache
+    it "empties cache on keyspace change" do
+      @connection.connection.should_receive(:describe_keyspace).exactly(2).times.and_call_original
+
+      @connection.schema
       @connection.keyspace = "CassandraCQLTestKeyspace"
       @connection.schema
+    end
+
+    it "allows cache reset" do
+      @connection.connection.should_receive(:describe_keyspace).exactly(2).times.and_call_original
+      @connection.schema
+      @connection.reset_cached_schema!
       @connection.schema
     end
   end

@@ -42,7 +42,7 @@ module CassandraCQL
       obj = self
       @connection.add_callback(:post_connect) do
         execute("USE #{@keyspace}")
-        @schema = nil
+        reset_cached_schema!
       end
     end
 
@@ -99,13 +99,17 @@ module CassandraCQL
     end
 
     def keyspace=(ks)
-      @schema = nil
+      reset_cached_schema!
       @keyspace = (ks.nil? ? nil : ks.to_s)
     end
 
     def keyspaces
       # TODO: This should be replaced with a CQL call that doesn't exist yet
       @connection.describe_keyspaces.map { |keyspace| Schema.new(keyspace) }
+    end
+
+    def reset_cached_schema!
+      @schema = nil
     end
 
     def schema
