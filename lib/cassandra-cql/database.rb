@@ -20,8 +20,8 @@ module CassandraCQL
   end
 
   class Database
-    attr_reader :connection, :schema, :keyspace
-  
+    attr_reader :connection, :keyspace
+
     def initialize(servers, options={}, thrift_client_options={})
       @options = {
         :keyspace => 'system'
@@ -42,16 +42,17 @@ module CassandraCQL
       obj = self
       @connection.add_callback(:post_connect) do
         execute("USE #{@keyspace}")
+        @schema = nil
       end
     end
-  
+
     def disconnect!
       @connection.disconnect! if active?
     end
 
     def active?
       # TODO: This should be replaced with a CQL call that doesn't exist yet
-      @connection.describe_version 
+      @connection.describe_version
       true
     rescue Exception
       false
@@ -96,19 +97,20 @@ module CassandraCQL
     rescue CassandraCQL::Thrift::InvalidRequestException
       raise Error::InvalidRequestException.new($!.why)
     end
-    
+
     def keyspace=(ks)
+      @schema = nil
       @keyspace = (ks.nil? ? nil : ks.to_s)
     end
-  
+
     def keyspaces
       # TODO: This should be replaced with a CQL call that doesn't exist yet
       @connection.describe_keyspaces.map { |keyspace| Schema.new(keyspace) }
     end
-    
+
     def schema
       # TODO: This should be replaced with a CQL call that doesn't exist yet
-      Schema.new(@connection.describe_keyspace(@keyspace))
+      return @schema ||= Schema.new(@connection.describe_keyspace(@keyspace))
     end
   end
 end
